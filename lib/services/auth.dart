@@ -6,8 +6,13 @@ class AuthService {
 
   //create user object based on Firebase user
 
-  UserData? _userFromFirebaseUser(User user) {
+  UserData? _userFromFirebaseUser(User? user) {
     return user != null ? UserData(uid: user.uid) : null;
+  }
+
+  // auth change user steam
+  Stream<UserData?> get user {
+    return _auth.authStateChanges().map(_userFromFirebaseUser);
   }
 
   // sign in anony
