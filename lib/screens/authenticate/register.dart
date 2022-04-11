@@ -83,6 +83,7 @@ class _RegisterState extends State<Register> {
                     ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
+                            if (!mounted) return;
                             setState(() {
                               loading = true;
                             });
