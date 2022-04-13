@@ -5,6 +5,7 @@ class Weather {
   int? humidity;
   double? feels_like;
   int? pressure;
+  String? weather_type;
 
   Weather({
     this.cityname,
@@ -13,6 +14,7 @@ class Weather {
     this.humidity,
     this.feels_like,
     this.pressure,
+    this.weather_type,
   });
 
   //function to parse JSON file into model
@@ -23,5 +25,6 @@ class Weather {
     pressure = json["main"]["pressure"];
     humidity = json["main"]["humidity"];
     feels_like = json["main"]["feels_like"];
+    weather_type = json["weather"][0]["main"];
   }
 }

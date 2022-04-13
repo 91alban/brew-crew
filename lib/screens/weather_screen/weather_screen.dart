@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guru4cars/services/weather_api_client.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/weather.dart';
 
@@ -22,7 +23,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Weather'),
+        title: const Text('Weather'),
         actions: [
           ElevatedButton(
               onPressed: () {
@@ -34,7 +35,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       body: FutureBuilder(
         future: getDataDurres(),
         builder: (context, snapshot) {
-          print(dataDurres);
+          print('weather data $dataDurres');
           if (snapshot.connectionState == ConnectionState.done) {
             return ListView(
               children: [
@@ -42,13 +43,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   children: [
                     Container(
                       height: MediaQuery.of(context).size.height * .6,
-                      decoration: BoxDecoration(),
-                      child: const Image(
-                          color: Colors.black,
-                          colorBlendMode: BlendMode.colorBurn,
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                              'https://de.wander.al/uploads/photos/02ca541ea2ebc61d50e4f90c7c4fe48d.jpg')),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                                'https://de.wander.al/uploads/photos/02ca541ea2ebc61d50e4f90c7c4fe48d.jpg'),
+                            colorFilter: ColorFilter.mode(
+                                Colors.black38, BlendMode.darken)),
+                      ),
                     ),
                     Positioned(
                       top: MediaQuery.of(context).size.height / 2 * .85,
@@ -64,22 +66,110 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       ),
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height * .5,
+                      height: MediaQuery.of(context).size.height * .4,
                       width: double.infinity,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .1,
+                          ),
                           Text(
                             dataDurres?.cityname ?? 'Nuk ka',
                             style: const TextStyle(
                                 fontSize: 26, color: Colors.white),
                             // textAlign: TextAlign.center,
                           ),
+                          Text(
+                            '${dataDurres?.weather_type.toString()}, ${DateFormat('EEEE').format(DateTime.now()).toString()}',
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                          Text(
+                            '${dataDurres?.temp} °C',
+                            style: TextStyle(color: Colors.white, fontSize: 56),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
+                Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: Text('Additional Information'),
+                ),
+                Divider(),
+                Container(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text('Wind'),
+                              SizedBox(width: 20),
+                              Text('${dataDurres?.wind.toString()}'),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Text('Humidity'),
+                              SizedBox(width: 20),
+                              Text('${dataDurres?.humidity.toString()}'),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text('Pressure'),
+                              SizedBox(width: 20),
+                              Text('${dataDurres?.pressure.toString()}'),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Text('Feels Like'),
+                              SizedBox(width: 20),
+                              Text('${dataDurres?.feels_like.toString()}'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                // Container(
+                //   height: 50,
+                //   child: GridView.count(
+                //     crossAxisCount: 2,
+                //     mainAxisSpacing: 30,
+                //     children: [
+                //       ListTile(
+                //         title: Text('Wind'),
+                //         trailing: Text('${dataDurres?.wind.toString()}'),
+                //       ),
+                //       ListTile(
+                //         title: Text('Humidity'),
+                //         trailing: Text('${dataDurres?.humidity.toString()}'),
+                //       ),
+                //       ListTile(
+                //         title: Text('Pressure'),
+                //         trailing: Text('${dataDurres?.pressure.toString()}'),
+                //       ),
+                //       ListTile(
+                //         title: Text('Feels Like'),
+                //         trailing: Text('${dataDurres?.feels_like.toString()}'),
+                //       ),
+                //     ],
+                //   ),
+                // )
               ],
             );
           }
